@@ -2,6 +2,7 @@ libPlay.so
 build_android/bin
 build_android/gen
 build_android/obj
+build_ios/build
 local.properties
 ant.properties
 Debug
