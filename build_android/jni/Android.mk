@@ -2,6 +2,10 @@ LOCAL_PATH:= $(call my-dir)
 
 include $(LOCAL_PATH)/ExternalDependencies.mk
 
+DEPENDENCIES_PATH := $(realpath $(LOCAL_PATH))/../../../Play-Dependencies
+FRAMEWORK_PATH    := $(realpath $(LOCAL_PATH))/../../../Play-Framework
+CODEGEN_PATH      := $(realpath $(LOCAL_PATH))/../../../Play-CodeGen
+
 include $(CLEAR_VARS)
 
 LOCAL_MODULE			:= libboost
@@ -19,14 +23,14 @@ include $(PREBUILT_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE			:= libFramework
-LOCAL_SRC_FILES 		:= ../$(FRAMEWORK_PATH)/build_android/obj/local/$(TARGET_ARCH_ABI)/libFramework.a
+LOCAL_SRC_FILES 		:= $(FRAMEWORK_PATH)/build_android/obj/local/$(TARGET_ARCH_ABI)/libFramework.a
 
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 
 LOCAL_MODULE			:= libCodeGen
-LOCAL_SRC_FILES 		:= ../$(CODEGEN_PATH)/build_android/obj/local/$(TARGET_ARCH_ABI)/libCodeGen.a
+LOCAL_SRC_FILES 		:= $(CODEGEN_PATH)/build_android/obj/local/$(TARGET_ARCH_ABI)/libCodeGen.a
 
 include $(PREBUILT_STATIC_LIBRARY)
 
