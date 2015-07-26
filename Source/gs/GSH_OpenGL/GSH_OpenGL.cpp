@@ -5,7 +5,9 @@
 #include "../../AppConfig.h"
 #include "../GsPixelFormats.h"
 #include "GSH_OpenGL.h"
-#include <android/log.h>
+//#ifdef __ANDROID__
+//#include <android/log.h>
+//#endif
 
 //#define _WIREFRAME
 
@@ -1690,8 +1692,9 @@ void CGSH_OpenGL::FlushVertexBuffer()
 
 	assert(m_renderState.isValid == true);
 
-
-	//__android_log_print(ANDROID_LOG_VERBOSE, "PLAY", "sizeof(PRIM_VERTEX) *  m_vertexBuffer.size() = %d * %d is %d", sizeof(PRIM_VERTEX), m_vertexBuffer.size(), sizeof(PRIM_VERTEX) * m_vertexBuffer.size());
+//#ifdef __ANDROID__
+//	__android_log_print(ANDROID_LOG_VERBOSE, "PLAY", "sizeof(PRIM_VERTEX) *  m_vertexBuffer.size() = %d * %d is %d", sizeof(PRIM_VERTEX), m_vertexBuffer.size(), sizeof(PRIM_VERTEX) * m_vertexBuffer.size());
+//#endif
 
 	if (sizeof(PRIM_VERTEX) * m_vertexBuffer.size() >= 504) {
 		m_vertexBuffer.clear();
