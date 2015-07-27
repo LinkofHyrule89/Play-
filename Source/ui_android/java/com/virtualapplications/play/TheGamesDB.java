@@ -48,6 +48,8 @@ public class TheGamesDB extends ContentProvider {
 	private static HashMap<String, String> gamesMap;
 	private static HashMap<String, String> coversMap;
 	
+	private boolean overwrite = false;
+	
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		
 		private Context mContext;
@@ -68,27 +70,30 @@ public class TheGamesDB extends ContentProvider {
 //					   + Games.KEY_BOXART + " VARCHAR(255)"+ ");");
 			
 			String DATABASE_PATH = mContext.getFilesDir().getAbsolutePath() + "/../databases/";
-			
-			byte[] buffer = new byte[1024];
-			OutputStream mOutput = null;
-			int length;
-			InputStream mInput = null;
-			try
-			{
-				mInput = mContext.getAssets().open(DATABASE_NAME);
-				mOutput = new FileOutputStream(DATABASE_PATH + DATABASE_NAME);
-				while((length = mInput.read(buffer)) > 0)
+			File dbFile = new FIle(DATABASE_PATH + DATABASE_NAME);
+			if (!dbFile.exists() || overwrite) {
+				byte[] buffer = new byte[1024];
+				OutputStream mOutput = null;
+				int length;
+				InputStream mInput = null;
+				try
 				{
-					mOutput.write(buffer, 0, length);
+					mInput = mContext.getAssets().open(DATABASE_NAME);
+					mOutput = new FileOutputStream(DATABASE_PATH + DATABASE_NAME);
+					while((length = mInput.read(buffer)) > 0)
+					{
+						mOutput.write(buffer, 0, length);
+					}
+					mOutput.close();
+					mOutput.flush();
+					mInput.close();
+					overwrite = false;
+					
 				}
-				mOutput.close();
-				mOutput.flush();
-				mInput.close();
-				
-			}
-			catch(IOException e)
-			{
-				e.printStackTrace();
+				catch(IOException e)
+				{
+					e.printStackTrace();
+				}
 			}
 			
 			db.execSQL("CREATE TABLE " + Covers.TABLE_NAME + " ("
@@ -104,6 +109,7 @@ public class TheGamesDB extends ContentProvider {
 						+ newVersion + ", which will destroy all old data");
 			db.execSQL("DROP TABLE IF EXISTS " + Games.TABLE_NAME);
 			db.execSQL("DROP TABLE IF EXISTS " + Covers.TABLE_NAME);
+			overwrite = true;
 			onCreate(db);
 		}
 	}
