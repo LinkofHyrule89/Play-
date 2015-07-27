@@ -23,4 +23,12 @@
 	<string name="menu_title_open">Menu</string>
 	<string name="menu_title_shut">Games</string>
 	<string name="menu_title_look">Search</string>
+	
+	<string name="report_issue">Previous Crash Detected</string>
+	
+	<string name="dismiss">Dismiss</string>
+	<string name="report">Report</string>
+	
+	<string name="platform">Copying logcat content to clipboard\nPlease paste in the issue report</string>
+	<string name="log_saved">Log saved to \"Files Dir\" path</string>
 </resources>

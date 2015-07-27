@@ -23,12 +23,15 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.io.*;
 import java.text.*;
 import java.util.*;
 import java.util.zip.*;
 import org.apache.commons.lang3.StringUtils;
 import com.android.util.FileUtils;
+
+import com.virtualapplications.play.logging.GenerateLogs;
 
 public class MainActivity extends Activity 
 {	
@@ -45,6 +48,8 @@ public class MainActivity extends Activity
 	private int currentOrientation;
 	private GameInfo gameInfo;
 	
+	private UncaughtExceptionHandler mUEHandler;
+	
 	@Override 
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -59,6 +64,33 @@ public class MainActivity extends Activity
 		}
 		
 		setContentView(R.layout.main);
+		
+		_preferences = getSharedPreferences("prefs", MODE_PRIVATE);
+		EmulatorActivity.RegisterPreferences();
+		
+		String prior_error = _preferences.getString("prior_error", null);
+		if (prior_error != null) {
+			displayLogOutput(prior_error);
+			_preferences.edit().remove("prior_error").commit();
+		} else {
+			mUEHandler = new Thread.UncaughtExceptionHandler() {
+				public void uncaughtException(Thread t, Throwable error) {
+					if (error != null) {
+						StringBuilder output = new StringBuilder();
+						output.append("UncaughtException:\n");
+						for (StackTraceElement trace : error.getStackTrace()) {
+							output.append(trace.toString() + "\n");
+						}
+						String log = output.toString();
+						_preferences.edit().putString("prior_error", log).commit();
+						error.printStackTrace();
+						android.os.Process.killProcess(android.os.Process.myPid());
+						System.exit(0);
+					}
+				}
+			};
+			Thread.setDefaultUncaughtExceptionHandler(mUEHandler);
+		}
 		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerToggle = new ActionBarDrawerToggle(
@@ -112,9 +144,6 @@ public class MainActivity extends Activity
 		
 		File filesDir = getFilesDir();
 		NativeInterop.setFilesDirPath(Environment.getExternalStorageDirectory().getAbsolutePath());
-
-		_preferences = getSharedPreferences("prefs", MODE_PRIVATE);
-		EmulatorActivity.RegisterPreferences();
 	
 		if(!NativeInterop.isVirtualMachineCreated())
 		{
@@ -563,5 +592,37 @@ public class MainActivity extends Activity
 				getActionBar().setTitle(getString(R.string.menu_title_shut));
 			}
 		}
+	}
+	
+	public void generateErrorLog() {
+		new GenerateLogs(MainActivity.this).execute(getFilesDir().getAbsolutePath());
+	}
+	
+	/**
+	 * Display a dialog to notify the user of prior crash
+	 *
+	 * @param string
+	 *            A generalized summary of the crash cause
+	 * @param bundle
+	 *            The savedInstanceState passed from onCreate
+	 */
+	private void displayLogOutput(final String error) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+		builder.setTitle(R.string.report_issue);
+		builder.setMessage(error);
+		builder.setPositiveButton(R.string.report,
+		new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				generateErrorLog();
+			}
+		});
+		builder.setNegativeButton(R.string.dismiss,
+		new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		builder.create();
+		builder.show();
 	}
 }
