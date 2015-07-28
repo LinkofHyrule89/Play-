@@ -594,6 +594,10 @@ public class MainActivity extends Activity
 		}
 	}
 	
+	public static void printDebugLog() {
+		((MainActivity) mActivity).generateErrorLog();
+	}
+	
 	public void generateErrorLog() {
 		new GenerateLogs(MainActivity.this).execute(getFilesDir().getAbsolutePath());
 	}

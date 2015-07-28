@@ -68,6 +68,17 @@ public class SettingsActivity extends PreferenceActivity
 					}
 				});
 			}
+			final Preference button_l = (Preference)getPreferenceManager().findPreference("ui.debug");
+			if (button_l != null) {
+				button_l.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+					@Override
+					public boolean onPreferenceClick(Preference arg0) {
+						MainActivity.printDebugLog();
+						getPreferenceScreen().removePreference(button_l);
+						return true;
+					}
+				});
+			}
 		}
 		
 		@Override
