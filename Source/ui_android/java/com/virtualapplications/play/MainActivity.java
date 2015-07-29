@@ -32,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.android.util.FileUtils;
 
 import com.virtualapplications.play.database.GameInfo;
+import com.virtualapplications.play.database.SqliteHelper.Games;
 import com.virtualapplications.play.logging.GenerateLogs;
 
 public class MainActivity extends Activity 
@@ -161,6 +162,7 @@ public class MainActivity extends Activity
 		}
 		
 		gameInfo = new GameInfo(MainActivity.this);
+		getContentResolver().call(Games.GAMES_URI, "importDb", null, null);
 		
 		prepareFileListView();
 	}
