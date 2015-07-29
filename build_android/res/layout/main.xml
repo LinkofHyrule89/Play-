@@ -48,6 +48,11 @@
 			android:layout_height="wrap_content"
 			android:text="@string/main_menu_settings" />
 		<Button
+			android:id="@+id/main_menu_debug"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/main_menu_debug" />
+		<Button
 			android:id="@+id/main_menu_about"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"

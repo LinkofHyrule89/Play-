@@ -1,4 +1,4 @@
-package com.virtualapplications.play;
+package com.virtualapplications.play.database;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -25,8 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 
 
-import com.virtualapplications.play.SqliteHelper.Games;
-import com.virtualapplications.play.SqliteHelper.Covers;
+import com.virtualapplications.play.database.SqliteHelper.Games;
+import com.virtualapplications.play.database.SqliteHelper.Covers;
 
 public class TheGamesDB extends ContentProvider {
 	
@@ -48,8 +49,6 @@ public class TheGamesDB extends ContentProvider {
 	private static HashMap<String, String> gamesMap;
 	private static HashMap<String, String> coversMap;
 	
-	private boolean overwrite = false;
-	
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		
 		private Context mContext;
@@ -61,39 +60,54 @@ public class TheGamesDB extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-//			db.execSQL("CREATE TABLE " + Games.TABLE_NAME + " ("
-//					   + Games.TABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-//					   + Games.KEY_GAMEID + " VARCHAR(255),"
-//					   + Games.KEY_TITLE + " VARCHAR(255),"
-//					   + Games.KEY_OVERVIEW + " VARCHAR(255),"
-//					   + Games.KEY_SERIAL + " VARCHAR(255),"
-//					   + Games.KEY_BOXART + " VARCHAR(255)"+ ");");
+			db.execSQL("CREATE TABLE " + Games.TABLE_NAME + " ("
+					   + Games.TABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+					   + Games.KEY_GAMEID + " VARCHAR(255),"
+					   + Games.KEY_TITLE + " VARCHAR(255),"
+					   + Games.KEY_OVERVIEW + " VARCHAR(255),"
+					   + Games.KEY_SERIAL + " VARCHAR(255),"
+					   + Games.KEY_BOXART + " VARCHAR(255)"+ ");");
 			
-			String DATABASE_PATH = mContext.getFilesDir().getAbsolutePath() + "/../databases/";
-			File dbFile = new FIle(DATABASE_PATH + DATABASE_NAME);
-			if (!dbFile.exists() || overwrite) {
-				byte[] buffer = new byte[1024];
-				OutputStream mOutput = null;
-				int length;
-				InputStream mInput = null;
-				try
+			String DATABASE_PATH = mContext.getFilesDir().getAbsolutePath();
+			byte[] buffer = new byte[1024];
+			OutputStream mOutput = null;
+			int length;
+			InputStream mInput = null;
+			try
+			{
+				mInput = mContext.getAssets().open(DATABASE_NAME);
+				mOutput = new FileOutputStream(DATABASE_PATH + "/" + DATABASE_NAME);
+				while((length = mInput.read(buffer)) > 0)
 				{
-					mInput = mContext.getAssets().open(DATABASE_NAME);
-					mOutput = new FileOutputStream(DATABASE_PATH + DATABASE_NAME);
-					while((length = mInput.read(buffer)) > 0)
-					{
-						mOutput.write(buffer, 0, length);
-					}
-					mOutput.close();
-					mOutput.flush();
-					mInput.close();
-					overwrite = false;
-					
+					mOutput.write(buffer, 0, length);
 				}
-				catch(IOException e)
-				{
-					e.printStackTrace();
-				}
+				mOutput.close();
+				mOutput.flush();
+				mInput.close();
+				
+			}
+			catch(IOException e)
+			{
+				e.printStackTrace();
+			}
+			SQLiteDatabase source = SQLiteDatabase.openDatabase(DATABASE_PATH
+				+ "/" + DATABASE_NAME, null, SQLiteDatabase.OPEN_READWRITE);
+			try {
+				SQLiteDatabase database = dbHelper.getWritableDatabase();
+				db.execSQL("INSERT INTO " + database + "." + Games.TABLE_NAME
+						   + " SELECT * FROM " + source + "." + Games.TABLE_NAME);
+				source.close();
+				database.close();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			File tempDb = new File (DATABASE_PATH, DATABASE_NAME);
+			if (tempDb.exists()) {
+				tempDb.delete();
+			}
+			File tempDbJournal = new File (DATABASE_PATH, DATABASE_NAME + "-journal");
+			if (tempDbJournal.exists()) {
+				tempDbJournal.delete();
 			}
 			
 			db.execSQL("CREATE TABLE " + Covers.TABLE_NAME + " ("
@@ -109,7 +123,6 @@ public class TheGamesDB extends ContentProvider {
 						+ newVersion + ", which will destroy all old data");
 			db.execSQL("DROP TABLE IF EXISTS " + Games.TABLE_NAME);
 			db.execSQL("DROP TABLE IF EXISTS " + Covers.TABLE_NAME);
-			overwrite = true;
 			onCreate(db);
 		}
 	}

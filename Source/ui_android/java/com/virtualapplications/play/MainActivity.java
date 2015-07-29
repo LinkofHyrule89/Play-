@@ -31,6 +31,7 @@ import java.util.zip.*;
 import org.apache.commons.lang3.StringUtils;
 import com.android.util.FileUtils;
 
+import com.virtualapplications.play.database.GameInfo;
 import com.virtualapplications.play.logging.GenerateLogs;
 
 public class MainActivity extends Activity 
@@ -66,7 +67,6 @@ public class MainActivity extends Activity
 		setContentView(R.layout.main);
 		
 		_preferences = getSharedPreferences("prefs", MODE_PRIVATE);
-		EmulatorActivity.RegisterPreferences();
 		
 		String prior_error = _preferences.getString("prior_error", null);
 		if (prior_error != null) {
@@ -136,6 +136,14 @@ public class MainActivity extends Activity
 			}
 		});
 		
+		Button buttonDebug = (Button) mDrawerLayout.findViewById(R.id.main_menu_debug);
+		buttonDebug.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				generateErrorLog();
+			}
+		});
+		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setTitle(getString(R.string.menu_title_shut));
@@ -144,6 +152,8 @@ public class MainActivity extends Activity
 		
 		File filesDir = getFilesDir();
 		NativeInterop.setFilesDirPath(Environment.getExternalStorageDirectory().getAbsolutePath());
+		
+		EmulatorActivity.RegisterPreferences();
 	
 		if(!NativeInterop.isVirtualMachineCreated())
 		{
@@ -592,10 +602,6 @@ public class MainActivity extends Activity
 				getActionBar().setTitle(getString(R.string.menu_title_shut));
 			}
 		}
-	}
-	
-	public static void printDebugLog() {
-		((MainActivity) mActivity).generateErrorLog();
 	}
 	
 	public void generateErrorLog() {
