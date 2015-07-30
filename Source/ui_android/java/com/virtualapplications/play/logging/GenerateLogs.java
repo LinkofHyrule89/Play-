@@ -181,7 +181,7 @@ public class GenerateLogs extends AsyncTask<String, Integer, String> {
 					mLogcatProc.getInputStream()));
 			log.append(separator);
 			log.append(separator);
-			log.append("Open GLES View Output");
+			log.append("Proprietary Tag Output");
 			log.append(separator);
 			log.append(separator);
 			while ((line = reader.readLine()) != null) {
