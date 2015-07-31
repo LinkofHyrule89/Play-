@@ -170,6 +170,9 @@ public class GamesDbAPI extends AsyncTask<File, Integer, Document> {
 					}
 				} else {
 					ContentValues values = new ContentValues();
+					values.put(Games.KEY_GAMEID, remoteID);
+					final String title = getValue(root, "GameTitle");
+					values.put(Games.KEY_TITLE, title);
 					final String overview = getValue(root, "Overview");
 					values.put(Games.KEY_OVERVIEW, overview);
 					
@@ -202,7 +205,7 @@ public class GamesDbAPI extends AsyncTask<File, Integer, Document> {
 					
 					if (childview != null) {
 						childview.findViewById(R.id.childview).setOnLongClickListener(
-							gameInfo.configureLongClick(getValue(root, "GameTitle"), overview, gameFile));
+							gameInfo.configureLongClick(title, overview, gameFile));
 						if (coverImage != null) {
 							gameInfo.getImage(remoteID, childview, coverImage);
 						}
