@@ -164,7 +164,7 @@ public class MainActivity extends Activity
 		Intent intent = getIntent();
 		if (intent.getAction() != null) {
 			if (intent.getAction().equals(Intent.ACTION_VIEW)) {
-				launchDisk(new File(intent.getData().getPath()));
+				launchDisk(new File(intent.getData().getPath()), true);
 				getIntent().setData(null);
 				setIntent(null);
 			}
@@ -435,7 +435,7 @@ public class MainActivity extends Activity
 			
 			childview.findViewById(R.id.childview).setOnClickListener(new OnClickListener() {
 				public void onClick(View view) {
-					launchDisk(game);
+					launchDisk(game, false);
 					return;
 				}
 			});
@@ -535,10 +535,10 @@ public class MainActivity extends Activity
 	}
 	
 	public static void launchGame(File game) {
-		((MainActivity) mActivity).launchDisk(game);
+		((MainActivity) mActivity).launchDisk(game, false);
 	}
 	
-	private void launchDisk (File game) {
+	private void launchDisk (File game, boolean terminate) {
 		try
 		{
 			if(IsLoadableExecutableFileName(game.getPath()))
@@ -559,6 +559,9 @@ public class MainActivity extends Activity
 		//TODO: Catch errors that might happen while loading files
 		Intent intent = new Intent(getApplicationContext(), EmulatorActivity.class);
 		startActivity(intent);
+		if (terminate) {
+			finish();
+		}
 	}
 	
 	private boolean isAndroidTV(Context context) {
