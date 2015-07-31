@@ -1,4 +1,4 @@
-package com.virtualapplications.play;
+package com.virtualapplications.play.virtualpad;
 
 import android.app.*;
 import android.content.*;
@@ -6,6 +6,10 @@ import android.graphics.*;
 import android.util.*;
 import android.view.*;
 import java.util.*;
+
+import com.virtualapplications.play.R;
+import com.virtualapplications.play.Constants;
+import com.virtualapplications.play.InputManagerConstants;
 
 public class VirtualPadView extends SurfaceView
 {

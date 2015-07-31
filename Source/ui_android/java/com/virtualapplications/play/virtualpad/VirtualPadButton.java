@@ -1,7 +1,9 @@
-package com.virtualapplications.play;
+package com.virtualapplications.play.virtualpad;
 
 import android.graphics.*;
 import android.text.*;
+
+import com.virtualapplications.play.InputManager;
 
 class VirtualPadButton extends VirtualPadItem
 {

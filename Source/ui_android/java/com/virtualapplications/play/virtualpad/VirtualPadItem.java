@@ -1,4 +1,4 @@
-package com.virtualapplications.play;
+package com.virtualapplications.play.virtualpad;
 
 import android.graphics.*;
 

@@ -1,6 +1,8 @@
-package com.virtualapplications.play;
+package com.virtualapplications.play.virtualpad;
 
 import android.graphics.*;
+
+import com.virtualapplications.play.InputManager;
 
 class VirtualPadStick extends VirtualPadItem
 {
