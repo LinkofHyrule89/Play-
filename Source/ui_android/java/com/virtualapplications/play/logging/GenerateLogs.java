@@ -40,6 +40,8 @@ public class GenerateLogs extends AsyncTask<String, Integer, String> {
 
 	private Context mContext;
 	private String currentTime;
+	
+	private String file_spam = "fail readDirectory() errno=20";
 
 	public GenerateLogs(Context mContext) {
 		this.mContext = mContext;
@@ -169,8 +171,10 @@ public class GenerateLogs extends AsyncTask<String, Integer, String> {
 			log.append(separator);
 			log.append(separator);
 			while ((line = reader.readLine()) != null) {
-				log.append(line);
-				log.append(separator);
+				if (!line.endsWith(file_spam)) {
+					log.append(line);
+					log.append(separator);
+				}
 			}
 			reader.close();
 			mLogcatProc = null;
