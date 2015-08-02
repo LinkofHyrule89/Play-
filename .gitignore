@@ -22,3 +22,7 @@ ReleaseAot
 *.orig
 xcuserdata
 
+build_android/libs/armeabi-v7a/gdb.setup
+build_android/libs/x86/gdbserver
+build_android/libs/x86/gdb.setup
+build_android/libs/armeabi-v7a/gdbserver
