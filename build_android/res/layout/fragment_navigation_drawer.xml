@@ -9,7 +9,9 @@
         android:divider="@android:color/transparent" android:dividerHeight="0dp"
         tools:context=".NavigationDrawerFragment"
         android:id="@+id/nav_listview"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+		android:fitsSystemWindows="true"
+		android:clipToPadding="false"/>
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"

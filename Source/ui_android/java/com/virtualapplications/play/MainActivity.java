@@ -297,7 +297,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(R.string.app_name);
-		actionBar.setSubtitle(R.string.menu_title_shut);
 	}
 
 	@Override
