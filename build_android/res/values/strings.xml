@@ -22,7 +22,7 @@
 	<string name="drawer_shut">Menu Shut</string>
 	
 	<string name="menu_title_open">Menu</string>
-	<string name="menu_title_shut">Games</string>
+	<string name="menu_title_shut">- Games</string>
 	<string name="menu_title_look">Search</string>
 	
 	<string name="file_list_recent">Recent</string>

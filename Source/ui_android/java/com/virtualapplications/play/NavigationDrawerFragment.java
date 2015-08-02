@@ -111,7 +111,8 @@ public class NavigationDrawerFragment extends Fragment {
                 new String[]{
                         getString(R.string.main_menu_settings),
 						getString(R.string.main_menu_debug),
-                        getString(R.string.main_menu_about)
+                        getString(R.string.main_menu_about),
+						""
                 }));
     }
 
@@ -324,7 +325,7 @@ public class NavigationDrawerFragment extends Fragment {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setIcon(R.drawable.ic_logo);
-		actionBar.setTitle("Navigation");
+		actionBar.setTitle(null);
         actionBar.setSubtitle(null);
     }
 
