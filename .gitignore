@@ -20,3 +20,4 @@ ReleaseAot
 *.orig
 xcuserdata
 
+build_android/ant.properties
