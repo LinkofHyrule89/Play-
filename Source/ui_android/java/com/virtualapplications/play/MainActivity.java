@@ -402,9 +402,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 			case 1:
 				displayAboutDialog();
 				break;
-			case 2:
-				finish();
-				break;
 
 		}
 	}
@@ -414,8 +411,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setIcon(R.drawable.ic_logo);
+<<<<<<< HEAD
 		actionBar.setTitle(R.string.menu_title_shut);
 		actionBar.setSubtitle(null);
+=======
+		actionBar.setTitle(R.string.app_header_one);
+>>>>>>> c00b926867d0438e722885926566b0e0b2584378
 	}
 
 	
@@ -433,30 +434,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
 	@Override
 	public void onBackPressed() {
-
-		if (doubleBackToExitPressedOnce) {
-			super.onBackPressed();
-			finish();
+		if (mNavigationDrawerFragment.mDrawerLayout != null && mNavigationDrawerFragment.isDrawerOpen()) {
+			mNavigationDrawerFragment.mDrawerLayout.closeDrawer(NavigationDrawerFragment.mFragmentContainerView);
 			return;
 		}
-
-		this.doubleBackToExitPressedOnce = true;
-		if (NavigationDrawerFragment.mDrawerLayout != null) {
-			if (mNavigationDrawerFragment.isDrawerOpen()) {
-				mNavigationDrawerFragment.mDrawerLayout.closeDrawer(NavigationDrawerFragment.mFragmentContainerView);
-			} else {
-				mNavigationDrawerFragment.mDrawerLayout.openDrawer(NavigationDrawerFragment.mFragmentContainerView);
-			}
-		}
-		Toast.makeText(this, R.string.pressback_exit, Toast.LENGTH_SHORT).show();
-
-		new Handler().postDelayed(new Runnable() {
-
-			@Override
-			public void run() {
-				doubleBackToExitPressedOnce = false;
-			}
-		}, 2000);
+		super.onBackPressed();
+		finish();
 	}
 
 	private final class ImageFinder extends AsyncTask<String, Integer, List<File>> {
